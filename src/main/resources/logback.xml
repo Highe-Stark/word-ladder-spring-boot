@@ -25,8 +25,9 @@
         </appender>
         <root level="info">
             <appender-ref ref="STDOUT"/>
+            <appender-ref ref="baselog"/>
         </root>
-        <logger name="com.veiasai" level="DEBUG">
+        <logger name="higher" level="DEBUG">
             <appender-ref ref="baselog"/>
         </logger>
     </configuration>
