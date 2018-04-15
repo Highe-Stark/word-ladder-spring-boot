@@ -1,5 +1,8 @@
 package com.wordladder.backend;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
 import java.util.Stack;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -9,12 +12,32 @@ import java.util.LinkedList;
  * @author Higher Stark
  */
 
-public class WordLadder
+public class WordLadder implements WordLadderInterface
 {
 	private String begin;
 	private String end;
 	private HashSet<String> dict;
 
+	public WordLadder (String filePath) throws IOException {
+		Scanner file;
+		// ClassLoader res = new ClassLoader("static/dictionary-1.txt");
+		String rootDir = System.getProperty("user.dir");
+		System.out.println("Root Directory: " + rootDir);
+		String absPath = rootDir + "\\" + filePath;
+		try {
+			file = new Scanner(new File(absPath), "UTF-8");
+		}
+		catch (IOException e) {
+			System.out.println("Error: " + absPath + " not found!");
+			return;
+		}
+		if (file != null || !file.hasNext()) {
+			System.out.println("Error occurred: " + absPath + " is null opened");
+		}
+		while (file.hasNext()) {
+			dict.add(file.next());
+		}
+	}
 	public WordLadder (String beg, String end, HashSet<String> dict) throws RuntimeException
 	{
 		if (beg == null || end == null || dict == null) throw new NullPointerException("null is not accepted");
@@ -76,5 +99,11 @@ public class WordLadder
 			}
 		}
 		return notFound;
+	}
+
+	public String service(String beg, String end) {
+		this.begin = beg;
+		this.end = end;
+		return findLadder();
 	}
 }

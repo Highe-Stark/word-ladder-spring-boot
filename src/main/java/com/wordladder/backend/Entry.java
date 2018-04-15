@@ -1,9 +1,9 @@
 package com.wordladder.backend;
-import java.util.*;
-import java.io.*;
-//import org.apache.log4j.Logger;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,7 +18,17 @@ public class Entry
 	 static Logger log = LoggerFactory.getLogger(Entry.class);
 
 	@RequestMapping(value="/wordladder", method=RequestMethod.GET)
-	public String main(@RequestParam(value="_beg", defaultValue="word") String _beg, @RequestParam(value="_end", defaultValue="path") String _end)
+	public String main(@RequestParam(value="beg", defaultValue = "welcome") String beg,
+					   @RequestParam(value="end", defaultValue = "welcome") String end)
+	{
+		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+		WordLadder wl = (WordLadder) context.getBean("wordladder");
+		String ret = wl.service(beg, end);
+		log.info("Request: " + beg + " -> " + end + ".");
+		log.info("Service Result: " + ret);
+		return ret;
+	}
+	/* public String main(@RequestParam(value="_beg", defaultValue="word") String _beg, @RequestParam(value="_end", defaultValue="path") String _end)
 	{
 		String beg = _beg;		// the word to begin in the word ladder
 		String end = _end;		// the destination word of the ladder
@@ -57,6 +67,6 @@ public class Entry
 			log.error("Error: Illegal Arguments");
 			return (e.getMessage());
 		}
-	}
+	}*/
 
 }
